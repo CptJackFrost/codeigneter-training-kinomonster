@@ -65,8 +65,11 @@ $route['posts/edit'] = 'posts/edit';
 $route['posts/delete'] = 'posts/delete';
 $route['posts/(:any)'] = 'posts/view/$1';
 
-$route['movies/(:any)'] = 'movies/view/$1';
 $route['movies/type/films'] = 'movies/type/films/$1';
 $route['movies/type/serials'] = 'movies/type/serials/$1';
+$route['movies/create'] = 'movies/create';
+$route['movies/edit'] = 'movies/edit';
+$route['movies/delete'] = 'movies/delete';
+$route['movies/(:any)'] = 'movies/view/$1';
 
 $route['rating/view'] = 'rating/view/$1';

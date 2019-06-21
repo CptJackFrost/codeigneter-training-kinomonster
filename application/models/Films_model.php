@@ -57,4 +57,41 @@
 			
 			return $query->result_array();
 		}
+		
+		public function addFilm($slug, $name, $descriptions, $director, $year, $rating, $poster, $player_code, $category_id) {
+			$data = array(
+				'slug' => $slug,
+				'name' => $name,
+				'descriptions' => $descriptions,
+				'director' => $director,
+				'year' => $year,
+				'rating' => $rating,
+				'poster' => $poster,
+				'player_code' => $player_code,
+				'category_id' => $category_id
+			);
+			
+			return $this->db->insert('movie', $data);
+		}
+		
+		public function updateFilm($slug, $name, $descriptions, $director, $year, $rating, $poster, $player_code, $category_id) {
+			$data = array(
+				'slug' => $slug,
+				'name' => $name,
+				'descriptions' => $descriptions,
+				'director' => $director,
+				'year' => $year,
+				'rating' => $rating,
+				'poster' => $poster,
+				'player_code' => $player_code,
+				'category_id' => $category_id
+			);
+			
+			return $this->db->update('movie', $data);
+		}
+		
+		public function deleteFilm($slug){
+			return $this->db->delete('moive', array('slug' => $slug));
+		}
+		
 	}

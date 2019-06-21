@@ -93,4 +93,47 @@
 			
 		}
 		
+		public function create() {
+		
+		if(!$this->dx_auth->is_admin()){
+			show_404();
+			//redirect('/', location);
+		}
+		
+		$this->data['title'] = "Добавить фильм";
+		
+		if($this->input->post('slug') 
+		&& $this->input->post('name') 
+		&& $this->input->post('descriptions')
+		&& $this->input->post('year')
+		&& $this->input->post('rating')
+		&& $this->input->post('director')
+		&& $this->input->post('poster')
+		&& $this->input->post('player_code')
+		&& $this->input->post('category_id')) {
+			
+			$slug = $this->input->post('slug');
+			$name = $this->input->post('name');
+			$descriptions = $this->input->post('descriptions');
+			$year = $this->input->post('year');
+			$rating = $this->input->post('rating');
+			$director = $this->input->post('director');
+			$poster = $this->input->post('poster');
+			$player_code = $this->input->post('player_code');
+			$category_id = $this->input->post('category_id');
+			
+			if ($this->films_model->addFilm($slug, $name, $descriptions, $director, $year, $rating, $poster, $player_code, $category_id)) {
+				$this->load->view('templates/header', $this->data);
+				$this->load->view('movies/success', $this->data);
+				$this->load->view('templates/footer');
+			}
+		}
+		
+			else {
+				$this->load->view('templates/header', $this->data);
+				$this->load->view('movies/create', $this->data);
+				$this->load->view('templates/footer');
+			}
+		}
+		
 	}
