@@ -65,6 +65,7 @@ $route['posts/edit'] = 'posts/edit';
 $route['posts/delete'] = 'posts/delete';
 $route['posts/(:any)'] = 'posts/view/$1';
 
+$route['movies'] = 'movies';
 $route['movies/type/films'] = 'movies/type/films/$1';
 $route['movies/type/serials'] = 'movies/type/serials/$1';
 $route['movies/create'] = 'movies/create';

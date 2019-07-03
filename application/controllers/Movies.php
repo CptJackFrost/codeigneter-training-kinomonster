@@ -7,6 +7,15 @@
 		public function __construct() {
 			parent::__construct();
 		}
+		
+		public function index(){
+			$this->data['title'] = "Все фильмы";
+			$this->data['movie_data'] = $this->films_model->getAllFilms();
+			
+			$this->load->view('templates/header', $this->data);
+			$this->load->view('movies/index', $this->data);
+			$this->load->view('templates/footer');
+		}
 	
 		public function view($slug = null){
 			
@@ -106,7 +115,7 @@
 		&& $this->input->post('name') 
 		&& $this->input->post('descriptions')
 		&& $this->input->post('year')
-		&& $this->input->post('rating')
+		//&& $this->input->post('rating')
 		&& $this->input->post('director')
 		&& $this->input->post('poster')
 		&& $this->input->post('player_code')
@@ -134,6 +143,88 @@
 				$this->load->view('movies/create', $this->data);
 				$this->load->view('templates/footer');
 			}
+		}
+		
+		public function edit($slug = NULL) {
+			
+		if(!$this->dx_auth->is_admin()){
+		show_404();
+		//redirect('/', location);
+		}
+			
+		$this->data['title'] = "Редактировать фильм";
+		$this->data['movie_item'] = $this->films_model->getAllFilms($slug);
+		
+		if (empty($this->data['movie_item']) && $slug !== null) {
+			show_404();
+		}
+		
+		$this->data['film_slug'] = $this->data['movie_item']['slug'];
+		$this->data['film_name'] = $this->data['movie_item']['name'];
+		$this->data['film_descriptions'] = $this->data['movie_item']['descriptions'];
+		$this->data['film_year'] = $this->data['movie_item']['year'];
+		$this->data['film_rating'] = $this->data['movie_item']['rating'];
+		$this->data['film_director'] = $this->data['movie_item']['director'];
+		$this->data['film_poster'] = $this->data['movie_item']['poster'];
+		$this->data['film_player'] = $this->data['movie_item']['player_code'];
+		$this->data['film_category_id'] = $this->data['movie_item']['category_id'];
+		
+		if($this->input->post('slug') 
+		&& $this->input->post('name') 
+		&& $this->input->post('descriptions')
+		&& $this->input->post('year')
+		//&& $this->input->post('rating')
+		&& $this->input->post('director')
+		&& $this->input->post('poster')
+		&& $this->input->post('player_code')
+		&& $this->input->post('category_id')) {
+			
+			$slug = $this->input->post('slug');
+			$name = $this->input->post('name');
+			$descriptions = $this->input->post('descriptions');
+			$year = $this->input->post('year');
+			$rating = $this->input->post('rating');
+			$director = $this->input->post('director');
+			$poster = $this->input->post('poster');
+			$player_code = $this->input->post('player_code');
+			$category_id = $this->input->post('category_id');
+			
+			if ($this->films_model->updateFilm($slug, $name, $descriptions, $director, $year, $rating, $poster, $player_code, $category_id)) {
+				echo "Страница фильма отредактирована";
+			}
+		}
+		
+			else {
+				$this->load->view('templates/header', $this->data);
+				$this->load->view('movies/edit', $this->data);
+				$this->load->view('templates/footer');
+			}		
+		}
+		
+		public function delete($slug = null){
+			if(!$this->dx_auth->is_admin()){
+				show_404();
+				//redirect('/', location);
+			}
+			
+			$this->data['movie_delete'] = $this->films_model->getAllFilms($slug);
+			
+			if (empty($this->data['movie_delete'])) {
+				show_404();
+			}
+			
+			$this->data['title'] = "удалить фильм";
+			$this->data['result'] = "ошибка удаления ".$this->data['movie_delete']['name'];
+		
+			if ($this->films_model->deleteFilm($slug)) {
+				$this->data['result'] = $this->data['movie_delete']['name']." успешно удален";
+				$slug = null;
+			}
+		
+			$this->load->view('templates/header', $this->data);
+			$this->load->view('movies/delete', $this->data);
+			$this->load->view('templates/footer');
+		
 		}
 		
 	}

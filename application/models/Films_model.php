@@ -4,6 +4,19 @@
 			$this->load->database();
 		}
 		
+		public function getAllFilms($slug = false) {
+			
+			if ($slug === false) {
+				$query = $this->db->order_by('add_date', 'desc')->get('movie');
+							
+				return $query->result_array();
+			}
+			
+			$query = $this->db->get_where('movie', array('slug' => $slug));
+			return $query->row_array();
+			
+		}
+		
 		public function getFilms($slug = false, $limit, $type = 1) {
 			
 			if ($slug === false) {
@@ -87,11 +100,11 @@
 				'category_id' => $category_id
 			);
 			
-			return $this->db->update('movie', $data);
+			return $this->db->update('movie', $data, array('slug' => $slug));
 		}
 		
 		public function deleteFilm($slug){
-			return $this->db->delete('moive', array('slug' => $slug));
+			return $this->db->delete('movie', array('slug' => $slug));
 		}
 		
 	}
