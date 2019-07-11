@@ -25,12 +25,27 @@
 				show_404();
 			}
 			
+
 			$this->data['title'] = $movie_slug['name'];
 			$this->data['year'] = $movie_slug['year'];
 			$this->data['rating'] = $movie_slug['rating'];
 			$this->data['director'] = $movie_slug['director'];
 			$this->data['player'] = $movie_slug['player_code'];
 			$this->data['descriptions_movie'] = $movie_slug['descriptions'];
+			
+			//вывод комментариев
+			$this->load->model('comments_model');
+			$this->data['comments'] = $this->comments_model->getComments($movie_slug['id'], 100);
+			
+			//данные для нового комментария
+			if($this->input->post('commentary')){
+				$comments_text = $this->input->post('commentary');
+				$user_id = $this->dx_auth->get_user_id();
+				$movie_id = $movie_slug['id'];			
+				if($this->comments_model->addComments($user_id, $movie_id, $comments_text)){
+					redirect($this->uri->uri_string());
+				}
+			}			
 			
 			
 			$this->load->view('templates/header', $this->data);

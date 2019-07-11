@@ -1,5 +1,14 @@
 <?php
-
+	
+	//шаблон для хелпера
+	/* if(!function_exists('templateMethod')){
+			
+			function templateMethod(){
+				$ci=& get_instance();
+				
+			}
+	} */
+	
 	if(!function_exists('show_active_menu')) {
 		
 		function show_active_menu($slug) {
@@ -20,6 +29,19 @@
 			}
 			
 			return $result;
+		}
+		
+		if(!function_exists('getUserNameById')){
+			
+			function getUserNameById($user_id){
+				$ci=& get_instance();
+				
+				$ci->load->model('dx_auth/users');
+				$query = $ci->users->get_user_by_id($user_id);
+				$result = $query->row();
+				return $result;
+			}
+			
 		}
 		
 	}
